@@ -48,6 +48,6 @@ class PlayerController extends Controller
      */
     public function record(Request $request)
     {
-        $record = $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+        $record = $this->dataPointService->recordPlayerDataPoint($request->name, $request->type ?: 'normal');
     }
 }

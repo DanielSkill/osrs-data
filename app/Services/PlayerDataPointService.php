@@ -41,7 +41,7 @@ class PlayerDataPointService
     {
         $player = $this->playerRepository->findOrCreatePlayer($name, $type);
         
-        $data = $this->playerService->getPlayerStats($name, $player->type ? $player->type : $type);
+        $data = $this->playerService->getPlayerStats($name, $player->type ?: $type);
 
         $dataPoint = PlayerDataPoint::create([
             'player_id' => $player->id,
