@@ -14,6 +14,15 @@ class Player extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'last_updated' => 'datetime',
+    ];
+
+    /**
      * Data Points relationship
      *
      * @return Illuminate\Database\Eloquent\Relations\HasMany

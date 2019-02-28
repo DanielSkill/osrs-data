@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Timeout;
 
 class RecordPlayerStatsRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class RecordPlayerStatsRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => ['required', new Timeout],
         ];
     }
 }

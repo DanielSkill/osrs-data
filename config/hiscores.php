@@ -43,6 +43,9 @@ return [
         "Construction"
     ],
 
+    /**
+     * List of minigames
+     */
     'minigames' => [
         "Bounty_Hunter",
         "Bounty_Hunter_Rogues",
@@ -53,5 +56,9 @@ return [
         "Clue_Scrolls_Elite",
         "Clue_Scrolls_Master",
         "LMS"
+    ],
+
+    'options' => [
+        'refresh_timeout' => 3600 // 1 minute
     ]
 ];
