@@ -75,4 +75,17 @@ class PlayerController extends Controller
 
         return $this->dataPointService->getPlayerGains($player, $request->start_date, $request->end_date);
     }
+
+    /**
+     * Return a players data points for a given time period
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function dataPoints(Request $request)
+    {
+        $player = $this->playerRepository->findOrFail($request->name);
+
+        return $this->dataPointService->getDataPointsBetween($player, $request->start_date, $request->end_date);
+    }
 }

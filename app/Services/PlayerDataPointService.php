@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Player;
 use App\Models\PlayerDataPoint;
 use App\Services\RSPlayerService;
@@ -101,7 +102,10 @@ class PlayerDataPointService
     public function getDataPointsBetween(Player $player, $startDate, $endDate)
     {
         return PlayerDataPoint::where('player_id', $player->id)
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [
+                Carbon::parse($startDate)->startOfDay(),
+                Carbon::parse($endDate)->endOfDay()
+            ])
             ->get();
     }
 
