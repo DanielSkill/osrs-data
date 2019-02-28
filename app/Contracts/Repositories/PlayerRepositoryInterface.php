@@ -11,7 +11,7 @@ interface PlayerRepositoryInterface
      *
      * @param string $name
      * @param string $type
-     * @return Collection
+     * @return mixed
      */
     public function findOrCreatePlayer(string $name, string $type);
 }
