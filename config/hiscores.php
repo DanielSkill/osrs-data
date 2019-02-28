@@ -58,7 +58,10 @@ return [
         "LMS"
     ],
 
+    /**
+     * Hiscore settings
+     */
     'options' => [
-        'refresh_timeout' => 3600 // 1 minute
+        'refresh_timeout' => 60 // 1 minute
     ]
 ];

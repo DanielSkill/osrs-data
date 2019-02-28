@@ -30,9 +30,9 @@ class Timeout implements Rule
     {
         $player = Player::where('name', $value)->firstOrFail();
 
-        $nextAvailableUpdate = $player->last_updated->addMilliseconds(config('hiscores.options.timeout'));
+        $nextAvailableUpdate = $player->last_updated->addSeconds(config('hiscores.options.refresh_timeout'));
 
-        if (Carbon::now()->greaterThan($nextAvailableUpdate)) {
+        if ($nextAvailableUpdate->greaterThan(Carbon::now())) {
             return false;
         }
 
