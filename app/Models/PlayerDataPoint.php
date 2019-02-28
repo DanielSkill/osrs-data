@@ -14,6 +14,15 @@ class PlayerDataPoint extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'data' => 'array',
+    ];
+
+    /**
      * Player relationship
      *
      * @return Illuminate\Database\Eloquent\Relations\BelongsTo

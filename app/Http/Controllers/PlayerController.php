@@ -60,6 +60,19 @@ class PlayerController extends Controller
      */
     public function record(RecordPlayerStatsRequest $request)
     {
-        $record = $this->dataPointService->recordPlayerDataPoint($request->name, $request->type ?: 'normal');
+       return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type ?: 'normal');
+    }
+
+    /**
+     * Return the players gains
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function gains(Request $request)
+    {
+        $player = $this->playerRepository->findOrFail($request->name);
+
+        return $this->dataPointService->getPlayerGains($player, $request->start_date, $request->end_date);
     }
 }

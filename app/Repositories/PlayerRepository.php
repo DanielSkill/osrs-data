@@ -24,4 +24,15 @@ class PlayerRepository implements PlayerRepositoryInterface
 
         return $player;
     }
+
+    /**
+     * Find a player or fail
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function findOrFail(string $name)
+    {
+        return Player::where('name', $name)->firstOrFail();
+    }
 }
