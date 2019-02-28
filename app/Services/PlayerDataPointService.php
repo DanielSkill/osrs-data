@@ -94,6 +94,6 @@ class PlayerDataPointService
     {
         return PlayerDataPoint::where('player_id', $player->id)
             ->where('created_at', '>', $date)
-            ->first();
+            ->firstOrFail();
     }
 }
