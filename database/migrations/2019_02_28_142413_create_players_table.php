@@ -17,6 +17,7 @@ class CreatePlayersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('type');
+            $table->timestamp('last_updated')->nullable();
             $table->timestamps();
         });
     }

@@ -12,4 +12,16 @@ class Player extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * A helper function for updated the last updated at timestamp
+     *
+     * @return bool
+     */
+    public function touchLastUpdated()
+    {
+        $this->last_updated = $this->freshTimestamp();
+
+        return $this->save();
+    }
 }

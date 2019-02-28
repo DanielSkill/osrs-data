@@ -41,11 +41,14 @@ class PlayerDataPointService
     {
         $player = $this->playerRepository->findOrCreatePlayer($name, $type);
         
-        $data = $this->playerService->getPlayerStats($name, $player->type ?: $type);
+        $data = $this->playerService->getPlayerStats($player);
 
         $dataPoint = PlayerDataPoint::create([
             'player_id' => $player->id,
             'data' => $data['skills']
         ]);
+
+        // updates the last updated timestamp
+        $player->touchLastUpdated();
     }
 }
