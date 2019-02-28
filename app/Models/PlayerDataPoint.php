@@ -12,4 +12,14 @@ class PlayerDataPoint extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Player relationship
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function player()
+    {
+        return $this->belongsTo('App\Models\Player');
+    }
 }
