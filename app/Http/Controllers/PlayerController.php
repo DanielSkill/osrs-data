@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Services\RSPlayerService;
 use App\Services\PlayerDataPointService;
 use App\Contracts\Repositories\PlayerRepositoryInterface;
+use App\Http\Requests\ShowPlayerStatsRequest;
+use App\Http\Requests\RecordPlayerStatsRequest;
 
 class PlayerController extends Controller
 {
@@ -56,7 +58,7 @@ class PlayerController extends Controller
      * @param Request $request
      * @return void
      */
-    public function record(Request $request)
+    public function record(RecordPlayerStatsRequest $request)
     {
         $record = $this->dataPointService->recordPlayerDataPoint($request->name, $request->type ?: 'normal');
     }
