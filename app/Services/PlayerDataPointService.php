@@ -58,15 +58,61 @@ class PlayerDataPointService
     /**
      * Get a players gains between two dates
      *
+     * @param Player $player
      * @param mixed $startDate
      * @param mixed $endDate
      * @return Collection
      */
     public function getPlayerGains(Player $player, $startDate, $endDate)
     {
-        $firstDataPoint = $this->getClosestDataPoint($player, $startDate);
-        $secondDataPoint = $this->getClosestDataPoint($player, $endDate);
+        $dataPoints = $this->getDataPointsBetween($player, $startDate, $endDate);
 
+        $firstDataPoint = $dataPoints->first();
+        $secondDataPoint = $dataPoints->last();
+
+        return $this->calculateExperienceDifference($firstDataPoint, $secondDataPoint);
+    }
+
+    /**
+     * Get a players lifetime gains between
+     *
+     * @param Player $player
+     * @return Collection
+     */
+    public function getPlayerLifetimeGains(Player $player)
+    {
+        $firstDataPoint = PlayerDataPoint::where('player_id', $player->id)
+            ->orderBy('created_at', 'asc')
+            ->first();
+
+        $secondDataPoint = PlayerDataPoint::where('player_id', $player->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return $this->calculateExperienceDifference($firstDataPoint, $secondDataPoint);
+    }
+
+    /**
+     * Get the closest data point to the date given
+     *
+     * @param mixed $date
+     * @return Collection
+     */
+    public function getDataPointsBetween(Player $player, $startDate, $endDate)
+    {
+        return PlayerDataPoint::where('player_id', $player->id)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+    }
+
+    /**
+     * Compare two data points and work out the differences
+     *
+     * @param PlayerDataPoint $firstDataPoint
+     * @param PlayerDataPoint $secondDataPoint
+     * @return Collection
+     */
+    private function calculateExperienceDifference($firstDataPoint, $secondDataPoint) {
         $diffCollection = new Collection();
 
         foreach (config('hiscores.skills') as $skill) {
@@ -77,23 +123,10 @@ class PlayerDataPointService
             $diffCollection[$skill] = [
                 'xp_diff' => (int) $xpDiff,
                 'rank_diff' => (int) $rankDiff,
-                'level_diff' => (int) $levelDiff
+                'level_diff' => (int) $levelDiff,
             ];
         }
 
         return $diffCollection;
-    }
-
-    /**
-     * Get the closest data point to the date given
-     *
-     * @param mixed $date
-     * @return Collection
-     */
-    public function getClosestDataPoint(Player $player, $date)
-    {
-        return PlayerDataPoint::where('player_id', $player->id)
-            ->where('created_at', '>', $date)
-            ->firstOrFail();
     }
 }
