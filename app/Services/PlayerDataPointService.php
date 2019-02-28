@@ -112,7 +112,8 @@ class PlayerDataPointService
      * @param PlayerDataPoint $secondDataPoint
      * @return Collection
      */
-    private function calculateExperienceDifference($firstDataPoint, $secondDataPoint) {
+    private function calculateExperienceDifference($firstDataPoint, $secondDataPoint) 
+    {
         $diffCollection = new Collection();
 
         foreach (config('hiscores.skills') as $skill) {
