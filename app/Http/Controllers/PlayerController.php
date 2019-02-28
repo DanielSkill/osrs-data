@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\RSPlayerService;
 use App\Services\PlayerDataPointService;
+use App\Contracts\Repositories\PlayerRepositoryInterface;
 
 class PlayerController extends Controller
 {
@@ -19,14 +20,21 @@ class PlayerController extends Controller
     protected $dataPointService;
 
     /**
+     * @var PlayerRepositoryInterface
+     */
+    protected $playerRepository;
+
+    /**
      * @param RSPlayerService $playerService
      */
     public function __construct(
         RSPlayerService $playerService,
-        PlayerDataPointService $dataPointService)
+        PlayerDataPointService $dataPointService,
+        PlayerRepositoryInterface $playerRepository)
     {
         $this->playerService = $playerService;
         $this->dataPointService = $dataPointService;
+        $this->playerRepository = $playerRepository;
     }
 
     /**
@@ -37,7 +45,9 @@ class PlayerController extends Controller
      */
     public function show(Request $request)
     {
-        return $this->playerService->getPlayerStats($request->name, 'normal');
+        $player = $this->playerRepository->findOrCreatePlayer($request->name, $request->type ?: 'normal');
+
+        return $this->playerService->getPlayerStats($player);
     }
 
     /**
