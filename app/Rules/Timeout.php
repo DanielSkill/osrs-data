@@ -28,12 +28,16 @@ class Timeout implements Rule
      */
     public function passes($attribute, $value)
     {
-        $player = Player::where('name', $value)->firstOrFail();
+        $player = Player::where('name', $value)->first();
 
-        $nextAvailableUpdate = $player->last_updated->addSeconds(config('hiscores.options.refresh_timeout'));
-
-        if ($nextAvailableUpdate->greaterThan(Carbon::now())) {
-            return false;
+        if ($player) {
+            $nextAvailableUpdate = $player->last_updated->addSeconds(config('hiscores.options.refresh_timeout'));
+    
+            if ($nextAvailableUpdate->greaterThan(Carbon::now())) {
+                return false;
+            }
+    
+            return true;
         }
 
         return true;
