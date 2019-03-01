@@ -22,4 +22,11 @@ interface PlayerRepositoryInterface
      * @return mixed
      */
     public function findOrFail(string $name);
+
+    /**
+     * Get all players that should auto refresh data
+     *
+     * @return Collection
+     */
+    public function getAllAutoRefreshPlayers();
 }

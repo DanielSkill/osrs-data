@@ -35,4 +35,16 @@ class PlayerRepository implements PlayerRepositoryInterface
     {
         return Player::where('name', $name)->firstOrFail();
     }
+
+    /**
+     * Get all players that should auto refresh, logic for this will likely
+     * get changed later when there are a higher number of players in
+     * the database.
+     *
+     * @return Collection
+     */
+    public function getAllAutoRefreshPlayers()
+    {
+        return Player::all();
+    }
 }
