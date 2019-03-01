@@ -31,7 +31,7 @@ class Timeout implements Rule
         $player = Player::where('name', $value)->first();
 
         if ($player) {
-            $nextAvailableUpdate = $player->last_updated->addSeconds(config('hiscores.options.refresh_timeout'));
+            $nextAvailableUpdate = $this->getNextAvailableRefreshTime($player); 
     
             if ($nextAvailableUpdate->greaterThan(Carbon::now())) {
                 return false;
@@ -51,5 +51,16 @@ class Timeout implements Rule
     public function message()
     {
         return 'Please wait before trying to update again.';
+    }
+
+    /**
+     * Return the time the person can next refresh
+     *
+     * @param Player $player
+     * @return Carbon
+     */
+    private function getNextAvailableRefreshTime(Player $player)
+    {
+        return $player->last_updated->addSeconds(config('hiscores.options.refresh_timeout'));
     }
 }
