@@ -8,6 +8,7 @@ use App\Models\PlayerDataPoint;
 use App\Services\RSPlayerService;
 use Illuminate\Support\Collection;
 use App\Contracts\Repositories\PlayerRepositoryInterface;
+use App\Events\DataPointRecorded;
 
 class PlayerDataPointService
 {    
@@ -49,6 +50,8 @@ class PlayerDataPointService
             'player_id' => $player->id,
             'data' => $data['skills']
         ]);
+
+        event(new DataPointRecorded($player, $dataPoint));
 
         // updates the last updated timestamp
         $player->touchLastUpdated();

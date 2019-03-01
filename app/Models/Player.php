@@ -33,6 +33,16 @@ class Player extends Model
     }
 
     /**
+     * Player Achievements relationship
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function achievements()
+    {
+        return $this->belongsToMany('App\Models\Achievement', 'player_achievements');
+    }
+
+    /**
      * A helper function for updated the last updated at timestamp
      *
      * @return bool
