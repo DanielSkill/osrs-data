@@ -49,7 +49,7 @@ class PlayerController extends Controller
     {
         $player = $this->playerRepository->findOrCreatePlayer($request->name, $request->type ?: 'normal');
 
-        return $this->playerService->getPlayerStats($player);
+        return $this->playerService->getPlayerStats($player, $request->type);
     }
 
     /**
