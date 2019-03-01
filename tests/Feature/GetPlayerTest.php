@@ -20,5 +20,9 @@ class GetPlayerTest extends TestCase
         $response = $this->json('get', route('player.show', ['name' => 'SalvationDMS']));
 
         $response->assertStatus(200);
+        $this->assertDatabaseHas('players', ['name' => 'SalvationDMS']);
+        $this->assertDatabaseHas('data_points', ['player_id' => 1]);
     }
+
+
 }

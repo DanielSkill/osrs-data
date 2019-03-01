@@ -49,6 +49,11 @@ class PlayerController extends Controller
     {
         $player = $this->playerRepository->findOrCreatePlayer($request->name, $request->type);
 
+        // if the user doesn't have any data points yet record their first data point
+        if (! $player->dataPoints()->exists()) {
+            return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+        }
+
         return $this->playerService->getPlayerStats($player, $request->type);
     }
 
