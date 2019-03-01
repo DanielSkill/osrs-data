@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Achievements;
 
 use App\Events\DataPointRecorded;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Achievements\MostXPDay;
 
-class GiveAchievements
+class MostOverallXPAchievementYear
 {
     /**
      * Create the event listener.
@@ -27,10 +26,6 @@ class GiveAchievements
      */
     public function handle(DataPointRecorded $event)
     {
-        $achievement = new MostXPDay($event->dataPoint, $event->player);
-
-        if ($achievement->shouldRecord()) {
-            $achievement->handle();
-        }
+        //
     }
 }

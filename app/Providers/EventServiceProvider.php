@@ -19,7 +19,10 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         'App\Events\DataPointRecorded' => [
-            'App\Listeners\GiveAchievements',
+            'App\Listeners\Achievements\MostOverallXPAchievementDay',
+            'App\Listeners\Achievements\MostOverallXPAchievementWeek',
+            'App\Listeners\Achievements\MostOverallXPAchievementMonth',
+            'App\Listeners\Achievements\MostOverallXPAchievementYear'
         ],
     ];
 

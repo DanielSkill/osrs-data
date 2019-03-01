@@ -39,7 +39,7 @@ class Player extends Model
      */
     public function achievements()
     {
-        return $this->belongsToMany('App\Models\Achievement', 'player_achievements');
+        return $this->belongsToMany('App\Models\Achievement','player_achievements')->withPivot('score')->withTimestamps();
     }
 
     /**
