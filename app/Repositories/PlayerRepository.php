@@ -16,11 +16,11 @@ class PlayerRepository implements PlayerRepositoryInterface
      * @param string $type
      * @return mixed
      */
-    public function findOrCreatePlayer(string $name, $type = 'normal')
+    public function findOrCreatePlayer(string $name, $type)
     {
         $player = Player::firstOrCreate(['name' => $name], [
             'name' => $name,
-            'type' => $type,
+            'type' => $type ?: 'normal',
             'last_updated' => Carbon::now()
         ]);
 
