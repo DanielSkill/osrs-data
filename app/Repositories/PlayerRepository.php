@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\Repositories\PlayerRepositoryInterface;
 use App\Models\Player;
+use Illuminate\Support\Carbon;
 
 
 class PlayerRepository implements PlayerRepositoryInterface
@@ -15,11 +16,12 @@ class PlayerRepository implements PlayerRepositoryInterface
      * @param string $type
      * @return mixed
      */
-    public function findOrCreatePlayer(string $name, string $type)
+    public function findOrCreatePlayer(string $name, $type = 'normal')
     {
         $player = Player::firstOrCreate(['name' => $name], [
             'name' => $name,
-            'type' => $type
+            'type' => $type,
+            'last_updated' => Carbon::now()
         ]);
 
         return $player;

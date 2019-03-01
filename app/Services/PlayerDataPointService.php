@@ -40,11 +40,11 @@ class PlayerDataPointService
      * @param string $type
      * @return bool
      */
-    public function recordPlayerDataPoint(string $name, string $type = 'normal')
+    public function recordPlayerDataPoint(string $name, $type = null)
     {
         $player = $this->playerRepository->findOrCreatePlayer($name, $type);
         
-        $data = $this->playerService->getPlayerStats($player);
+        $data = $this->playerService->getPlayerStats($player, $type);
 
         $dataPoint = PlayerDataPoint::create([
             'player_id' => $player->id,
@@ -70,6 +70,10 @@ class PlayerDataPointService
     public function getPlayerGains(Player $player, $startDate, $endDate)
     {
         $dataPoints = $this->getDataPointsBetween($player, $startDate, $endDate);
+
+        if ($dataPoints->count() < 2) {
+            abort(404, 'Not enough data gathered yet.');
+        }
 
         $firstDataPoint = $dataPoints->first();
         $secondDataPoint = $dataPoints->last();

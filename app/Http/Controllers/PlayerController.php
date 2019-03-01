@@ -47,7 +47,7 @@ class PlayerController extends Controller
      */
     public function show(Request $request)
     {
-        $player = $this->playerRepository->findOrCreatePlayer($request->name, $request->type ?: 'normal');
+        $player = $this->playerRepository->findOrCreatePlayer($request->name, $request->type);
 
         return $this->playerService->getPlayerStats($player, $request->type);
     }
@@ -60,7 +60,7 @@ class PlayerController extends Controller
      */
     public function record(RecordPlayerStatsRequest $request)
     {
-       return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type ?: 'normal');
+       return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
     }
 
     /**
