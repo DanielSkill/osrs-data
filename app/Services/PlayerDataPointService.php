@@ -71,10 +71,6 @@ class PlayerDataPointService
     {
         $dataPoints = $this->getDataPointsBetween($player, $startDate, $endDate);
 
-        if ($dataPoints->count() < 2) {
-            abort(404, 'Not enough data gathered yet.');
-        }
-
         $firstDataPoint = $dataPoints->first();
         $secondDataPoint = $dataPoints->last();
 
@@ -106,14 +102,18 @@ class PlayerDataPointService
      * @param mixed $date
      * @return Collection
      */
-    public function getDataPointsBetween(Player $player, $startDate, $endDate)
+    public function getDataPointsBetween(Player $player, $startDate = null, $endDate = null)
     {
-        return PlayerDataPoint::where('player_id', $player->id)
-            ->whereBetween('created_at', [
+        $dataPoints = PlayerDataPoint::where('player_id', $player->id);
+
+        if (!is_null($startDate) && !is_null($endDate)) {
+            $dataPoints->whereBetween('created_at', [
                 Carbon::parse($startDate)->startOfDay(),
                 Carbon::parse($endDate)->endOfDay()
-            ])
-            ->get();
+            ]);
+        }
+
+        return $dataPoints->get();
     }
 
     /**

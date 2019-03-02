@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\RSPlayerService;
-use App\Services\PlayerDataPointService;
 use App\Contracts\Repositories\PlayerRepositoryInterface;
-use App\Http\Requests\ShowPlayerStatsRequest;
 use App\Http\Requests\RecordPlayerStatsRequest;
+use App\Http\Resources\ShowPlayerStatisticsResource;
+use App\Services\PlayerDataPointService;
+use App\Services\RSPlayerService;
+use Illuminate\Http\Request;
+use App\Contracts\Repositories\AchievementRepositoryInterface;
 
 class PlayerController extends Controller
 {
@@ -32,11 +33,12 @@ class PlayerController extends Controller
     public function __construct(
         RSPlayerService $playerService,
         PlayerDataPointService $dataPointService,
-        PlayerRepositoryInterface $playerRepository)
-    {
+        PlayerRepositoryInterface $playerRepository,
+        AchievementRepositoryInterface $achievementRepository) {
         $this->playerService = $playerService;
         $this->dataPointService = $dataPointService;
         $this->playerRepository = $playerRepository;
+        $this->achievementRepository = $achievementRepository;
     }
 
     /**
@@ -50,11 +52,20 @@ class PlayerController extends Controller
         $player = $this->playerRepository->findOrCreatePlayer($request->name, $request->type);
 
         // if the user doesn't have any data points yet record their first data point
-        if (! $player->dataPoints()->exists()) {
-            return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+        if (!$player->dataPoints()->exists()) {
+            $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
         }
 
-        return $this->playerService->getPlayerStats($player, $request->type);
+        $dataPoints = $this->dataPointService->getDataPointsBetween($player);
+
+        $achievements = $this->achievementRepository->getPlayerAchievements($player);
+
+        return new ShowPlayerStatisticsResource([
+            'player' => $player,
+            'statistics' => $this->playerService->getPlayerStats($player, $request->type),
+            'dataPoints' => $dataPoints,
+            'achievements' => $achievements
+        ]);
     }
 
     /**
@@ -65,7 +76,7 @@ class PlayerController extends Controller
      */
     public function record(RecordPlayerStatsRequest $request)
     {
-       return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+        return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
     }
 
     /**

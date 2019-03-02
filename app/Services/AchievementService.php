@@ -31,10 +31,11 @@ class AchievementService
      */
     public function giveAchievement(Player $player, Achievement $achievement)
     {
+        // TODO: This does not quite work correctly
         $xpGained = $this->dataPointService->getPlayerGains(
             $player,
-            Carbon::now()->startOfDay(),
-            Carbon::now()->endOfDay()
+            Carbon::now()->subDays(1),
+            Carbon::now()
         )[$achievement->skill]['xp_diff'];
 
         $currentBest = $player->achievements()
@@ -42,7 +43,10 @@ class AchievementService
             ->max('score');
 
         if ($xpGained > $currentBest || $currentBest == 0) {
-            $player->achievements()->attach($achievement->id, ['score' => $xpGained]);
+            $player->achievements()
+            ->attach($achievement->id, [
+                'score' => $xpGained
+            ]);
         }
     }
 }

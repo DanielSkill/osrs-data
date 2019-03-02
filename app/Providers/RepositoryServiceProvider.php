@@ -22,6 +22,11 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Contracts\Repositories\PlayerMetricsRepositoryInterface',
             'App\Repositories\PlayerMetricsRepository'
         );
+
+        $this->app->bind(
+            'App\Contracts\Repositories\AchievementRepositoryInterface',
+            'App\Repositories\AchievementRepository'
+        );
     }
 
     /**
