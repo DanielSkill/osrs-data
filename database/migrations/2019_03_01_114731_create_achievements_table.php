@@ -17,6 +17,7 @@ class CreateAchievementsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('skill');
+            $table->integer('timespan')->nullable();
             $table->timestamps();
         });
     }

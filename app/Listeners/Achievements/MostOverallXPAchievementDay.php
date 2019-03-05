@@ -36,6 +36,6 @@ class MostOverallXPAchievementDay
     {
         $achievement = Achievement::find(1);
 
-        $this->achievementService->giveAchievement($event->player, $achievement);
+        $this->achievementService->giveXpAchievement($event->player, $achievement);
     }
 }

@@ -26,6 +26,8 @@ class MostOverallXPAchievementYear
      */
     public function handle(DataPointRecorded $event)
     {
-        //
+        $achievement = Achievement::find(4);
+
+        $this->achievementService->giveXpAchievement($event->player, $achievement);
     }
 }
