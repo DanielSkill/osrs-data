@@ -4,6 +4,7 @@ namespace App\Listeners\Achievements;
 
 use App\Models\Achievement;
 use App\Events\DataPointRecorded;
+use App\Services\AchievementService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
