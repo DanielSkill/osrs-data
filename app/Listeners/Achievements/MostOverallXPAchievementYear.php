@@ -2,6 +2,7 @@
 
 namespace App\Listeners\Achievements;
 
+use App\Models\Achievement;
 use App\Events\DataPointRecorded;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,13 +10,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class MostOverallXPAchievementYear
 {
     /**
+     * @var AchievementService
+     */
+    protected $achievementService;
+
+    /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AchievementService $achievementService)
     {
-        //
+        $this->achievementService = $achievementService;
     }
 
     /**
