@@ -69,15 +69,13 @@ class PlayerController extends Controller
 
         $achievements = $this->achievementRepository->getPlayerAchievements($player);
 
-        $playerData = new ShowPlayerStatisticsResource([
-            'player' => $player,
-            'statistics' => $this->playerService->getPlayerStats($player, $request->type),
-            'dataPoints' => $dataPoints,
-            'achievements' => $achievements
-        ]);
-
-        $data = $this->cache->remember('player.' . $player->id, 60, function() use ($playerData) {
-            return $playerData; 
+        $data = $this->cache->remember('player.' . $player->id, 60, function() use ($player, $dataPoints, $achievements, $request) {
+            return new ShowPlayerStatisticsResource([
+                'player' => $player,
+                'statistics' => $this->playerService->getPlayerStats($player, $request->type),
+                'dataPoints' => $dataPoints,
+                'achievements' => $achievements
+            ]);
         });
 
         return $data;
