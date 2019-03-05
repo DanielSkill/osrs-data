@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\PlayerRepositoryInterface;
 use App\Models\Player;
 use Illuminate\Support\Carbon;
+use App\Contracts\Repositories\PlayerRepositoryInterface;
 
 
 class PlayerRepository implements PlayerRepositoryInterface

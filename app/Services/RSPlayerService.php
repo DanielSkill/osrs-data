@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Player;
 use Illuminate\Support\Collection;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RSPlayerService extends ApiService
 {
@@ -24,7 +23,7 @@ class RSPlayerService extends ApiService
         ]);
 
         if ($response->getStatusCode() == 404) {
-            abort(404, 'No user found.');
+            return false;
         }
 
         $statistics = $this->csvToJson($response->getBody());
