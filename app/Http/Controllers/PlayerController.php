@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Cache\Repository as Cache;
 use App\Contracts\Repositories\PlayerRepositoryInterface;
 use App\Http\Requests\RecordPlayerStatsRequest;
 use App\Http\Resources\ShowPlayerStatisticsResource;
@@ -12,6 +13,11 @@ use App\Contracts\Repositories\AchievementRepositoryInterface;
 
 class PlayerController extends Controller
 {
+    /**
+     * @var Cache
+     */
+    protected $cache;
+
     /**
      * @var RSPlayerService
      */
@@ -31,10 +37,13 @@ class PlayerController extends Controller
      * @param RSPlayerService $playerService
      */
     public function __construct(
+        Cache $cache,
         RSPlayerService $playerService,
         PlayerDataPointService $dataPointService,
         PlayerRepositoryInterface $playerRepository,
-        AchievementRepositoryInterface $achievementRepository) {
+        AchievementRepositoryInterface $achievementRepository) 
+    {
+        $this->cache = $cache;
         $this->playerService = $playerService;
         $this->dataPointService = $dataPointService;
         $this->playerRepository = $playerRepository;
@@ -60,12 +69,18 @@ class PlayerController extends Controller
 
         $achievements = $this->achievementRepository->getPlayerAchievements($player);
 
-        return new ShowPlayerStatisticsResource([
+        $playerData = new ShowPlayerStatisticsResource([
             'player' => $player,
             'statistics' => $this->playerService->getPlayerStats($player, $request->type),
             'dataPoints' => $dataPoints,
             'achievements' => $achievements
         ]);
+
+        $data = $this->cache->remember('player.' . $player->id, 60, function() use ($playerData) {
+            return $playerData; 
+        });
+
+        return $data;
     }
 
     /**

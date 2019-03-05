@@ -19,6 +19,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         'App\Events\DataPointRecorded' => [
+            'App\Listeners\Achievements\ClearPlayerResponseCache',
             'App\Listeners\Achievements\MostOverallXPAchievementDay',
             'App\Listeners\Achievements\MostOverallXPAchievementWeek',
             'App\Listeners\Achievements\MostOverallXPAchievementMonth',

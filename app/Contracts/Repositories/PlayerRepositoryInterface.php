@@ -13,7 +13,7 @@ interface PlayerRepositoryInterface
      * @param string $type
      * @return mixed
      */
-    public function findOrCreatePlayer(string $name, string $type);
+    public function findOrCreatePlayer(string $name, $type);
 
     /**
      * Find a player or fail the request
