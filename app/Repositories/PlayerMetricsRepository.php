@@ -30,7 +30,9 @@ class PlayerMetricsRepository implements PlayerMetricsRepositoryInterface
     public function getAchievementLeaderboard(Achievement $achievement)
     {
         return $achievement->players()
-            ->orderByDesc('player_achievements.score')
+            ->selectRaw('players.id, players.name, players.type, MAX(player_achievements.score) as highscore')
+            ->orderByDesc('highscore')
+            ->groupBy('players.id')
             ->get();
     }
 }
