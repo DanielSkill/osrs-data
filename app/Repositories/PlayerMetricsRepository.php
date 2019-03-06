@@ -2,9 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\Player;
+use App\Models\Achievement;
 use App\Models\PlayerDataPoint;
 use App\Contracts\Repositories\PlayerMetricsRepositoryInterface;
-use App\Models\Achievement;
 
 
 class PlayerMetricsRepository implements PlayerMetricsRepositoryInterface
@@ -29,9 +30,9 @@ class PlayerMetricsRepository implements PlayerMetricsRepositoryInterface
      */
     public function getAchievementLeaderboard(Achievement $achievement)
     {
-        return $achievement->players()
-            ->selectRaw('players.id, players.name, players.type, MAX(player_achievements.score) as highscore')
-            ->orderByDesc('highscore')
+        return Player::selectRaw('*, MAX(player_achievements.score) as max_score')
+            ->join('player_achievements', 'players.id', '=', 'player_achievements.player_id')
+            ->orderByDesc('max_score')
             ->groupBy('players.id')
             ->get();
     }
