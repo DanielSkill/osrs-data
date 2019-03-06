@@ -11,5 +11,5 @@ interface PlayerMetricsRepositoryInterface
      * @param mixed $date
      * @return Collection
      */
-    public function getXpGainedLeaderboard(string $skill, $date);
+    public function getXpGainedLeaderboard(string $skill);
 }

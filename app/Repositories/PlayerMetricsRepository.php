@@ -2,15 +2,21 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\PlayerMetricsRepositoryInterface;
 use App\Models\PlayerDataPoint;
+use App\Contracts\Repositories\PlayerMetricsRepositoryInterface;
 
 
-class PlayerMetricsRepositoy implements PlayerMetricsRepositoryInterface
+class PlayerMetricsRepository implements PlayerMetricsRepositoryInterface
 {
-    public function getXpGainedLeaderboard(string $skill, $date)
+    /**
+     * Return the players with the most xp gained in a skill
+     *
+     * @param string $skill
+     * @return Collection
+     */
+    public function getXpGainedLeaderboard(string $skill)
     {
-        return PlayerDataPoint::orderBy('data->overall->xp')
+        return PlayerDataPoint::orderByRaw("cast(json_unquote(json_extract(`data`, '$.{$skill}.xp')) as unsigned) desc")
             ->get();
     }
 }
