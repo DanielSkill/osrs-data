@@ -12,4 +12,14 @@ class Achievement extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Players relationship
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function players()
+    {
+        return $this->belongsToMany('App\Models\Player', 'player_achievements')->withPivot('score')->withTimestamps();
+    }
 }
