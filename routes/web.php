@@ -13,5 +13,5 @@
 
 
 Route::get('/', function() {
-    return App\Models\PlayerDataPoint::all();
+    return view('app');
 });
