@@ -72,7 +72,7 @@ class PlayerController extends Controller
         $data = $this->cache->remember('player.' . $player->id, 60, function() use ($player, $dataPoints, $achievements, $request) {
             return new ShowPlayerStatisticsResource([
                 'player' => $player,
-                'statistics' => $this->playerService->getPlayerStats($player, $request->type),
+                'statistics' => $dataPoints->sortByDesc('created_at')->first(),
                 'dataPoints' => $dataPoints,
                 'achievements' => $achievements
             ]);
