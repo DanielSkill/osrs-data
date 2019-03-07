@@ -17,6 +17,7 @@ class CreatePlayerDataPointsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('player_id');
             $table->json('data');
+            $table->json('data_diff');
             $table->timestamps();
         });
     }
