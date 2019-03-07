@@ -11,10 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/', function() {
+    return App\Models\PlayerDataPoint::all();
 });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
