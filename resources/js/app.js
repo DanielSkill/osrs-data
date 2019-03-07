@@ -9,6 +9,7 @@ require('./bootstrap');
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import playerService from './services/player';
 
 export default class App extends Component {
   state = {
@@ -21,6 +22,7 @@ export default class App extends Component {
       this.setState({
         player: res.data.data
       })
+      console.log(playerService.getGainsInPeriod(res.data.data, '2019-03-06', '2019-03-07'))
     });
   }
 
