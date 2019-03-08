@@ -1,5 +1,5 @@
 export default {
-    'skills': [
+    'data': [
         "Overall",
         "Attack",
         "Defence",

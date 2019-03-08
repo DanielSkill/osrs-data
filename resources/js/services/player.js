@@ -28,7 +28,7 @@ const getGainsInPeriod = (player, startDate, endDate) => {
 const getXpDifference = (firstDataPoint, lastDataPoint) => {
   let diffCollection = [];
 
-  skills.skills.forEach((skill) => {
+  skills.data.forEach((skill) => {
     let xpDiff = lastDataPoint.data[skill].xp - firstDataPoint.data[skill].xp
     let levelDiff = lastDataPoint.data[skill].level - firstDataPoint.data[skill].level
     let rankDiff = lastDataPoint.data[skill].rank - firstDataPoint.data[skill].rank
