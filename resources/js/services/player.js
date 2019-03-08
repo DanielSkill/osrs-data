@@ -18,8 +18,8 @@ const getGainsInPeriod = (dataPoints, startDate, endDate) => {
       return (moment(dataPoint.created_at).isBetween(momentStart, momentEnd));
     });
 
-    const firstDataPoint = filteredDataPoints[0]
-    const lastDataPoint = filteredDataPoints[filteredDataPoints.length - 1]
+    let firstDataPoint = filteredDataPoints[0]
+    let lastDataPoint = filteredDataPoints[filteredDataPoints.length - 1]
 
     return getXpDifference(firstDataPoint, lastDataPoint)
 }
@@ -27,17 +27,29 @@ const getGainsInPeriod = (dataPoints, startDate, endDate) => {
 const getXpDifference = (firstDataPoint, lastDataPoint) => {
   let diffCollection = {};
 
-  skills.data.forEach((skill) => {
-    let xpDiff = lastDataPoint.data[skill].xp - firstDataPoint.data[skill].xp
-    let levelDiff = lastDataPoint.data[skill].level - firstDataPoint.data[skill].level
-    let rankDiff = lastDataPoint.data[skill].rank - firstDataPoint.data[skill].rank
-
-    diffCollection[skill] = {
-      'xpDiff': xpDiff,
-      'levelDiff': levelDiff,
-      'rankDiff': rankDiff,
-    }
-  })
+  if (typeof firstDataPoint !== 'undefined' && typeof lastDataPoint !== 'undefined') {
+    skills.data.forEach((skill) => {
+      let xpDiff = lastDataPoint.data[skill].xp - firstDataPoint.data[skill].xp
+      let levelDiff = lastDataPoint.data[skill].level - firstDataPoint.data[skill].level
+      let rankDiff = lastDataPoint.data[skill].rank - firstDataPoint.data[skill].rank
+  
+      diffCollection[skill] = {
+        'xpDiff': xpDiff,
+        'levelDiff': levelDiff,
+        'rankDiff': rankDiff,
+      }
+    })
+  } else {
+    // if there is not two data points available in the range
+    // return 0 for all skills
+    skills.data.forEach((skill) => {
+      diffCollection[skill] = {
+        'xpDiff': 0,
+        'levelDiff': 0,
+        'rankDiff': 0,
+      }
+    })
+  }
 
   return diffCollection;
 }
