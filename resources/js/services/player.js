@@ -4,14 +4,13 @@ import skills from '../data/skills.js';
 
 
 const getPlayerDetails = (name) => {
-    axios.get('/api/stats/player/'.name)
-        .then((response) => {
-            return response.data
+    return axios.get(`/api/stats/player/${name}`)
+        .then(response => {
+            return response
         })
 }
 
-const getGainsInPeriod = (player, startDate, endDate) => {
-    const dataPoints = player.dataPoints
+const getGainsInPeriod = (dataPoints, startDate, endDate) => {
     const momentStart = moment(startDate);
     const momentEnd = moment(endDate).endOf('day');
 
@@ -26,7 +25,7 @@ const getGainsInPeriod = (player, startDate, endDate) => {
 }
 
 const getXpDifference = (firstDataPoint, lastDataPoint) => {
-  let diffCollection = [];
+  let diffCollection = {};
 
   skills.data.forEach((skill) => {
     let xpDiff = lastDataPoint.data[skill].xp - firstDataPoint.data[skill].xp

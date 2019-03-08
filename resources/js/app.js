@@ -8,27 +8,44 @@ require('./bootstrap');
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
 import playerService from './services/player';
 
 export default class App extends Component {
   state = {
-    player: {}
+    player: {},
+    gains: null,
+    startDate: null,
+    endDate: null,
+    user: ""
   }
-  
-  componentDidMount() {
-    axios.get('/api/stats/player/SalvationDMS')
-    .then((res) => {
-      this.setState({
-        player: res.data.data
+
+  getUserData = () => {
+    playerService.getPlayerDetails(this.state.user)
+      .then(response => {
+        let data = playerService.getGainsInPeriod(response.data.data.dataPoints, '2019-03-07', '2019-03-08');
+        console.log(data);
+
+        this.setState({
+          player: response.data.data,
+          gains: data
+        })
       })
-      console.log(playerService.getGainsInPeriod(res.data.data, '2019-03-06', '2019-03-07'))
-    });
+  }
+
+  handleChange = (e) => {
+    this.setState({user: e.target.value})
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.getUserData()
   }
 
   render() {
     return (
-      <div>Hello World</div>
+      <form onSubmit={this.handleSubmit}>
+        <input type="text" onChange={this.handleChange} value={this.state.user} />
+      </form>
     );
   }
 }

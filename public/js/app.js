@@ -78831,9 +78831,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _services_player__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/player */ "./resources/js/services/player.js");
+/* harmony import */ var _services_player__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/player */ "./resources/js/services/player.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -78865,7 +78863,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-
 var App =
 /*#__PURE__*/
 function (_Component) {
@@ -78885,29 +78882,50 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(App)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      player: {}
+      player: {},
+      gains: null,
+      startDate: null,
+      endDate: null,
+      user: ""
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "getUserData", function () {
+      _services_player__WEBPACK_IMPORTED_MODULE_2__["default"].getPlayerDetails(_this.state.user).then(function (response) {
+        var data = _services_player__WEBPACK_IMPORTED_MODULE_2__["default"].getGainsInPeriod(response.data.data.dataPoints, '2019-03-07', '2019-03-08');
+        console.log(data);
+
+        _this.setState({
+          player: response.data.data,
+          gains: data
+        });
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleChange", function (e) {
+      _this.setState({
+        user: e.target.value
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleSubmit", function (e) {
+      e.preventDefault();
+
+      _this.getUserData();
     });
 
     return _this;
   }
 
   _createClass(App, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/stats/player/SalvationDMS').then(function (res) {
-        _this2.setState({
-          player: res.data.data
-        });
-
-        console.log(_services_player__WEBPACK_IMPORTED_MODULE_3__["default"].getGainsInPeriod(res.data.data, '2019-03-06', '2019-03-07'));
-      });
-    }
-  }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Hello World");
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        onChange: this.handleChange,
+        value: this.state.user
+      }));
     }
   }]);
 
@@ -78990,7 +79008,7 @@ if (token) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  'skills': ["Overall", "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer", "Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining", "Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecrafting", "Hunter", "Construction"]
+  'data': ["Overall", "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer", "Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining", "Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecrafting", "Hunter", "Construction"]
 });
 
 /***/ }),
@@ -79014,13 +79032,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var getPlayerDetails = function getPlayerDetails(name) {
-  axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/stats/player/'.name).then(function (response) {
-    return response.data;
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/stats/player/".concat(name)).then(function (response) {
+    return response;
   });
 };
 
-var getGainsInPeriod = function getGainsInPeriod(player, startDate, endDate) {
-  var dataPoints = player.dataPoints;
+var getGainsInPeriod = function getGainsInPeriod(dataPoints, startDate, endDate) {
   var momentStart = moment__WEBPACK_IMPORTED_MODULE_1___default()(startDate);
   var momentEnd = moment__WEBPACK_IMPORTED_MODULE_1___default()(endDate).endOf('day');
   var filteredDataPoints = dataPoints.filter(function (dataPoint) {
@@ -79032,8 +79049,8 @@ var getGainsInPeriod = function getGainsInPeriod(player, startDate, endDate) {
 };
 
 var getXpDifference = function getXpDifference(firstDataPoint, lastDataPoint) {
-  var diffCollection = [];
-  _data_skills_js__WEBPACK_IMPORTED_MODULE_2__["default"].skills.forEach(function (skill) {
+  var diffCollection = {};
+  _data_skills_js__WEBPACK_IMPORTED_MODULE_2__["default"].data.forEach(function (skill) {
     var xpDiff = lastDataPoint.data[skill].xp - firstDataPoint.data[skill].xp;
     var levelDiff = lastDataPoint.data[skill].level - firstDataPoint.data[skill].level;
     var rankDiff = lastDataPoint.data[skill].rank - firstDataPoint.data[skill].rank;
