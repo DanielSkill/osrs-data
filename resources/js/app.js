@@ -12,6 +12,8 @@ import playerService from './services/player';
 import { DatePicker, Table, Input } from 'antd';
 import skills from './data/skills';
 import DefaultLayout from './components/layout';
+import TableRankStatistic from './components/table-rank-statistic';
+import TableLevelStatistic from './components/table-level-statistic';
 import moment from 'moment'
 
 const {
@@ -24,11 +26,11 @@ const {
 
 const columns = [
   {
-      title: 'Skill',
-      key: 'skill',
-      fixed: 'left',
-      width: 20,
-      render: (text, record, index) => <img src={`/images/skill-icons/${skills.data[index].toLowerCase()}.gif`} height={16} width={16} />,
+    title: 'Skill',
+    key: 'skill',
+    fixed: 'left',
+    width: 20,
+    render: (text, record, index) => <img src={`/images/skill-icons/${skills.data[index].toLowerCase()}.gif`} height={16} width={16} />,
   },
   {
     title: 'xp',
@@ -38,12 +40,14 @@ const columns = [
   {
     title: 'level',
     dataIndex: 'levelDiff',
-    key: 'levelDiff'
+    key: 'levelDiff',
+    render: (text) => <TableLevelStatistic data={text} />
   },
   {
     title: 'rank',
     dataIndex: 'rankDiff',
-    key: 'rankDiff'
+    key: 'rankDiff',
+    render: (text) => <TableRankStatistic data={text} />
   },
 ]
 
