@@ -53,8 +53,8 @@ export default class App extends Component {
     gains: {},
     user: "",
     dateRange: [
-      moment().subtract(7, 'days'),
-      moment()
+      moment({hour: 0, minute: 0, seconds: 0}).subtract(6, 'days'),
+      moment({hour: 23, minute: 59, seconds: 59})
     ],
     isLoading: false
   }
@@ -80,7 +80,7 @@ export default class App extends Component {
     this.setState({
         dateRange: value,
     }, () => {
-      if (this.state.dateRange.length == 2) {
+      if (this.state.dateRange.length == 2 && Object.keys(this.state.player).length !== 0) {
         this.setState({
           gains: playerService.getGainsInPeriod(this.state.player.dataPoints, this.state.dateRange[0], this.state.dateRange[1])
         })
