@@ -6,7 +6,7 @@ const { Header, Content } = Layout;
 const DefaultLayout = (props) => {
   return  (
     <Layout>
-      <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+      <Header style={{ position: 'fixed', zIndex: 1000, width: '100%' }}>
         <div className="logo" />
         <Menu
           theme="dark"

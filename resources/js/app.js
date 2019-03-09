@@ -12,6 +12,7 @@ import playerService from './services/player';
 import { DatePicker, Table, Input } from 'antd';
 import skills from './data/skills';
 import DefaultLayout from './components/layout';
+import moment from 'moment'
 
 const {
   RangePicker
@@ -51,7 +52,10 @@ export default class App extends Component {
     player: {},
     gains: {},
     user: "",
-    dateRange: [],
+    dateRange: [
+      moment().subtract(7, 'days'),
+      moment()
+    ],
     isLoading: false
   }
 
@@ -92,7 +96,7 @@ export default class App extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <Search
-          placeholder="input search text"
+          placeholder="Username"
           onChange={this.handleChange}
           onSearch={this.handleSubmit}
           style={{ width: 200 }}
@@ -101,6 +105,7 @@ export default class App extends Component {
           showTime={{ format: 'HH:mm' }}
           format="YYYY-MM-DD HH:mm"
           placeholder={['Start Time', 'End Time']}
+          defaultValue={this.state.dateRange}
           onChange={this.handleDateRangeChange}
         />
         <Table 
