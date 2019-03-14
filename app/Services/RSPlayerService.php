@@ -14,11 +14,18 @@ class RSPlayerService extends ApiService
      * @param string $type
      * @return Collection
      */
-    public function getPlayerStats(Player $player, $type = null)
+    public function getPlayerStats($player, $type = null)
     {
-        $type = $type ?: $player->type;
+        // give the ability to pass either name or model
+        if (is_string($player)) {
+            $name = $player;
+            $type = $type ?: 'normal';
+        } else {
+            $name = $player->name;
+            $type = $type ?: $player->type;
+        } 
 
-        $response = $this->apiClient->get(config("hiscores.endpoints.{$type}") . $player->name, [
+        $response = $this->apiClient->get(config("hiscores.endpoints.{$type}") . $name, [
             'http_errors' => false
         ]);
 

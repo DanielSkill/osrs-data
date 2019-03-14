@@ -10,6 +10,8 @@ use App\Services\PlayerDataPointService;
 use App\Services\RSPlayerService;
 use Illuminate\Http\Request;
 use App\Contracts\Repositories\AchievementRepositoryInterface;
+use App\Services\PlayerNameChangeService;
+use App\Http\Requests\PlayerNameChangeRequest;
 
 class PlayerController extends Controller
 {
@@ -34,6 +36,16 @@ class PlayerController extends Controller
     protected $playerRepository;
 
     /**
+     * @var PlayerNameChangeService
+     */
+    protected $playerNameChangeService;
+
+    /**
+     * @var AchievementRepositoryInterface
+     */
+    protected $achievementRepository;
+
+    /**
      * @param RSPlayerService $playerService
      */
     public function __construct(
@@ -41,12 +53,14 @@ class PlayerController extends Controller
         RSPlayerService $playerService,
         PlayerDataPointService $dataPointService,
         PlayerRepositoryInterface $playerRepository,
+        PlayerNameChangeService $playerNameChangeService,
         AchievementRepositoryInterface $achievementRepository) 
     {
         $this->cache = $cache;
         $this->playerService = $playerService;
         $this->dataPointService = $dataPointService;
         $this->playerRepository = $playerRepository;
+        $this->playerNameChangeService = $playerNameChangeService;
         $this->achievementRepository = $achievementRepository;
     }
 
@@ -89,7 +103,13 @@ class PlayerController extends Controller
      */
     public function record(RecordPlayerStatsRequest $request)
     {
-        return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+        $data = $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+
+        if (! $data) {
+            return abort(404, 'Player not found');
+        }
+
+        return $data;
     }
 
     /**
@@ -116,5 +136,23 @@ class PlayerController extends Controller
         $player = $this->playerRepository->findOrFail($request->name);
 
         return $this->dataPointService->getDataPointsBetween($player, $request->start_date, $request->end_date);
+    }
+
+    /**
+     * Change a players name
+     *
+     * @return Response
+     */
+    public function changeName(PlayerNameChangeRequest $request)
+    {
+        $player = $this->playerRepository->findOrFail($request->name);
+
+        $change = $this->playerNameChangeService->changeName($player, $request->new_name);
+
+        if ($change) {
+            return response()->json('Name successfully changed.');
+        }
+
+        return response()->json('Error changing name.', 422);
     }
 }
