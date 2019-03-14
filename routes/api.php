@@ -16,5 +16,7 @@ Route::get('stats/gains/{name}', 'PlayerController@gains')->name('player.gains')
 Route::get('stats/player/{name}', 'PlayerController@show')->name('player.show');
 Route::get('stats/player/data-points/{name}', 'PlayerController@dataPoints')->name('player.datapoints');
 
+Route::post('player/change-name', 'PlayerController@changeName')->name('player.change-name');
+
 Route::get('leaderboard/skill/{name}', 'MetricsController@skillLeaderboard')->name('leaderboard.skills');
 Route::get('leaderboard/achievements/{achievement}', 'MetricsController@achievementLeaderboard')->name('leaderboard.achievements');

@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Achievements\MostOverallXPAchievementMonth',
             'App\Listeners\Achievements\MostOverallXPAchievementYear'
         ],
+        'App\Events\PlayerNameChange' => [
+            'App\Listeners\Player\RecordPlayerNameChange'
+        ]
     ];
 
     /**
