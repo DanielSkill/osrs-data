@@ -8,10 +8,14 @@ require('./bootstrap');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PlayerPage from './views/player';
+import { Provider } from 'react-redux';
+import store from './store';
 
 const App = () => {
   return (
-    <PlayerPage />
+    <Provider store={store}>
+      <PlayerPage />
+    </Provider>
   )
 }
 
