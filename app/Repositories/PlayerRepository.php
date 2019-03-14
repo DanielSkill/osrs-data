@@ -47,6 +47,6 @@ class PlayerRepository implements PlayerRepositoryInterface
      */
     public function getAllAutoRefreshPlayers()
     {
-        return Player::all();
+        return Player::whereHas('dataPoints')->get();
     }
 }

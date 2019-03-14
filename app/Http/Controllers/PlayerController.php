@@ -89,7 +89,13 @@ class PlayerController extends Controller
      */
     public function record(RecordPlayerStatsRequest $request)
     {
-        return $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+        $data = $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+
+        if (! $data) {
+            return abort(404, 'Player not found');
+        }
+
+        return $data;
     }
 
     /**

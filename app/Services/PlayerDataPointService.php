@@ -46,6 +46,10 @@ class PlayerDataPointService
         
         $data = $this->playerService->getPlayerStats($player, $type);
 
+        if (! $data) {
+            return false;
+        }
+
         $dataPoint = PlayerDataPoint::create([
             'player_id' => $player->id,
             'data' => $data['skills']
