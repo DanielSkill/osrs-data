@@ -37,6 +37,7 @@ const getXpDifference = (firstDataPoint, lastDataPoint) => {
         'xpDiff': xpDiff,
         'levelDiff': levelDiff,
         'rankDiff': rankDiff,
+        'currentXp': lastDataPoint.data[skill].xp
       }
     })
   } else {
@@ -47,6 +48,7 @@ const getXpDifference = (firstDataPoint, lastDataPoint) => {
         'xpDiff': 0,
         'levelDiff': 0,
         'rankDiff': 0,
+        'currentXp': 0
       }
     })
   }
