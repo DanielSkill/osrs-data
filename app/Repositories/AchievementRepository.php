@@ -18,8 +18,9 @@ class AchievementRepository implements AchievementRepositoryInterface
         // TODO: This does a unique filter after the query has finished 
         // which could lead to performance issues
         return $player->achievements()
-            ->orderByDesc('score')
+            ->orderByDesc('player_achievements.score')
             ->get()
-            ->unique('id');
+            ->unique('id')
+            ->values();
     }
 }

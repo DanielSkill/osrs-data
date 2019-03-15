@@ -79,11 +79,12 @@ class PlayerController extends Controller
             $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
         }
 
-        $dataPoints = $this->dataPointService->getDataPointsBetween($player);
+        // cache the response for performance benefits
+        $data = $this->cache->remember('player.' . $player->id, 60, function() use ($player, $request) {
+            $dataPoints = $this->dataPointService->getDataPointsBetween($player);
 
-        $achievements = $this->achievementRepository->getPlayerAchievements($player);
+            $achievements = $this->achievementRepository->getPlayerAchievements($player);
 
-        $data = $this->cache->remember('player.' . $player->id, 60, function() use ($player, $dataPoints, $achievements, $request) {
             return new ShowPlayerStatisticsResource([
                 'player' => $player,
                 'statistics' => $dataPoints->sortByDesc('created_at')->first(),
