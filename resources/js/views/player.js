@@ -22,7 +22,7 @@ const {
 
 const columns = [
   {
-    title: 'Skill',
+    title: 'skill',
     key: 'skill',
     fixed: 'left',
     width: 20,
@@ -111,6 +111,7 @@ export default class PlayerPage extends Component {
             onChange={this.handleDateRangeChange}
           />
           <Table
+            rowKey={record => record.currentLevel + record.currentXp}
             columns={columns}
             dataSource={Object.values(this.state.gains)}
             size='small'
