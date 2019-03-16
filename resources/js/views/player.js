@@ -4,21 +4,18 @@
 import React, { Component } from 'react';
 
 import playerService from '../services/player';
-import { DatePicker, Table, Input } from 'antd';
+import { DatePicker, Table, AutoComplete, Form, Button } from 'antd';
 import skills from '../data/skills';
 import DefaultLayout from '../components/layout';
 import TableRankStatistic from '../components/table-rank-statistic';
 import TableLevelStatistic from '../components/table-level-statistic';
 import TableXpStatistic from '../components/table-xp-statistic';
 import moment from 'moment';
+import localStorage from '../services/localStorage';
 
 const {
   RangePicker
 } = DatePicker;
-
-const {
-  Search
-} = Input;
 
 const columns = [
   {
@@ -70,11 +67,16 @@ class PlayerPage extends Component {
           gains: playerService.getGainsInPeriod(response.data.data.dataPoints, this.state.dateRange[0], this.state.dateRange[1]),
           isLoading: false
         })
+
+        // only save them as a search if data was found
+        if (response.data.data.dataPoints.length > 0) {
+          localStorage.addItem('searches', this.state.user)
+        }
       })
   }
 
-  handleChange = (e) => {
-    this.setState({ user: e.target.value })
+  handleChange = (value) => {
+    this.setState({ user: value })
   }
 
   handleDateRangeChange = (value) => {
@@ -89,36 +91,51 @@ class PlayerPage extends Component {
     });
   }
 
-  handleSubmit = () => {
-    this.getUserData()
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.getUserData();
   }
 
   render() {
     return (
       <DefaultLayout>
-        <form onSubmit={this.handleSubmit}>
-          <Search
-            placeholder="Username"
-            onChange={this.handleChange}
-            onSearch={this.handleSubmit}
-            style={{ width: 200 }}
-          />
-          <RangePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-            placeholder={['Start Time', 'End Time']}
-            defaultValue={this.state.dateRange}
-            onChange={this.handleDateRangeChange}
-          />
+        <Form layout="inline" onSubmit={this.handleSubmit}>
+          <Form.Item>
+            <AutoComplete
+              value={this.state.user}
+              placeholder="Username"
+              dataSource={JSON.parse(localStorage.getItem('searches', []))}
+              onChange={this.handleChange}
+              style={{ width: 200 }}
+              filterOption
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item>
+            <RangePicker
+              showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD HH:mm"
+              placeholder={['Start Time', 'End Time']}
+              defaultValue={this.state.dateRange}
+              onChange={this.handleDateRangeChange}
+            />
+          </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+              >
+                Find
+            </Button>
+          </Form.Item>
+        </Form>
           <Table
-            rowKey={record => record.currentLevel + record.currentXp}
             columns={columns}
             dataSource={Object.values(this.state.gains)}
             size='small'
             pagination={false}
             loading={this.state.isLoading}
           />
-        </form>
       </DefaultLayout>
     );
   }
