@@ -4,11 +4,25 @@ namespace App\Repositories;
 
 use App\Models\Player;
 use Illuminate\Support\Carbon;
+use App\Services\RSPlayerService;
 use App\Contracts\Repositories\PlayerRepositoryInterface;
 
 
 class PlayerRepository implements PlayerRepositoryInterface
 {
+    /**
+     * @var RSPlayerServiceá
+     */
+    protected $playerService;
+
+    /**
+     * @param RSPlayerService $playerService
+     */
+    public function __construct(RSPlayerService $playerService)
+    {
+        $this->playerService = $playerService;
+    }
+
     /**
      * Find or create a player
      *
@@ -18,13 +32,34 @@ class PlayerRepository implements PlayerRepositoryInterface
      */
     public function findOrCreatePlayer(string $name, $type)
     {
-        $player = Player::firstOrCreate(['name' => $name], [
-            'name' => $name,
-            'type' => $type ?: 'normal',
-            'last_updated' => Carbon::now()
-        ]);
+        $player = $this->find($name);
+
+        if (! $player) {
+            $stats = $this->playerService->getPlayerStats($name, $type);
+
+            if (! $stats) {
+                abort(404, 'Player not found');
+            }
+
+            $player = Player::create([
+                'name' => $name,
+                'type' => $type ?: 'normal',
+                'last_updated' => Carbon::now()
+            ]);
+        }
 
         return $player;
+    }
+
+    /**
+     * Find a player
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function find(string $name)
+    {
+        return Player::where('name', $name)->first();
     }
 
     /**

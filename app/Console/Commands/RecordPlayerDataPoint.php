@@ -57,7 +57,7 @@ class RecordPlayerDataPoint extends Command
     public function handle()
     {
         foreach ($this->playerRepository->getAllAutoRefreshPlayers() as $player) {
-            $this->dataPointService->recordPlayerDataPoint($player->name, $player->type);   
+            $this->dataPointService->recordPlayerDataPoint($player);   
         }
     }
 }

@@ -24,6 +24,14 @@ interface PlayerRepositoryInterface
     public function findOrFail(string $name);
 
     /**
+     * Find a player
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function find(string $name);
+
+    /**
      * Get all players that should auto refresh data
      *
      * @return Collection

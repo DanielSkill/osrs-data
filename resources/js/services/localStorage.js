@@ -20,7 +20,7 @@ const getItem = (key, defaultValue) => {
     return defaultValue
   }
 
-  return item
+  return JSON.parse(item)
 } 
 
 export default {

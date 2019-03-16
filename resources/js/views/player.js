@@ -62,15 +62,18 @@ class PlayerPage extends Component {
 
     playerService.getPlayerDetails(this.state.user)
       .then(response => {
-        this.setState({
-          player: response.data.data,
-          gains: playerService.getGainsInPeriod(response.data.data.dataPoints, this.state.dateRange[0], this.state.dateRange[1]),
-          isLoading: false
-        })
-
-        // only save them as a search if data was found
-        if (response.data.data.dataPoints.length > 0) {
-          localStorage.addItem('searches', this.state.user)
+        if (response.status !== 404) {
+          this.setState({
+            player: response.data.data,
+            gains: playerService.getGainsInPeriod(response.data.data.dataPoints, this.state.dateRange[0], this.state.dateRange[1]),
+            isLoading: false
+          })
+  
+          // only save them as a search if data was found
+          if (response.data.data.dataPoints.length > 0) {
+            localStorage.addItem('searches', this.state.user)
+          
+          }
         }
       })
   }
@@ -104,7 +107,7 @@ class PlayerPage extends Component {
             <AutoComplete
               value={this.state.user}
               placeholder="Username"
-              dataSource={JSON.parse(localStorage.getItem('searches', []))}
+              dataSource={localStorage.getItem('searches', [])}
               onChange={this.handleChange}
               style={{ width: 200 }}
               filterOption

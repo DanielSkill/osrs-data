@@ -40,11 +40,9 @@ class PlayerDataPointService
      * @param string $type
      * @return bool
      */
-    public function recordPlayerDataPoint(string $name, $type = null)
+    public function recordPlayerDataPoint(Player $player)
     {
-        $player = $this->playerRepository->findOrCreatePlayer($name, $type);
-        
-        $data = $this->playerService->getPlayerStats($player, $type);
+        $data = $this->playerService->getPlayerStats($player);
 
         if (! $data) {
             return false;
