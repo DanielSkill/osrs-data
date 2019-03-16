@@ -10,7 +10,7 @@ import DefaultLayout from '../components/layout';
 import TableRankStatistic from '../components/table-rank-statistic';
 import TableLevelStatistic from '../components/table-level-statistic';
 import TableXpStatistic from '../components/table-xp-statistic';
-import moment from 'moment'
+import moment from 'moment';
 
 const {
   RangePicker
@@ -48,7 +48,7 @@ const columns = [
   },
 ]
 
-export default class PlayerPage extends Component {
+class PlayerPage extends Component {
   state = {
     player: {},
     gains: {},
@@ -124,5 +124,4 @@ export default class PlayerPage extends Component {
   }
 }
 
-
-
+export default PlayerPage
