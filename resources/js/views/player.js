@@ -4,46 +4,15 @@
 import React, { Component } from 'react';
 
 import playerService from '../services/player';
-import { DatePicker, Table, AutoComplete, Form, Button } from 'antd';
-import skills from '../data/skills';
+import { DatePicker, AutoComplete, Form, Button } from 'antd';
 import DefaultLayout from '../components/layout';
-import TableRankStatistic from '../components/table-rank-statistic';
-import TableLevelStatistic from '../components/table-level-statistic';
-import TableXpStatistic from '../components/table-xp-statistic';
 import moment from 'moment';
 import localStorage from '../services/localStorage';
+import PlayerTable from '../components/player-table';
 
 const {
   RangePicker
 } = DatePicker;
-
-const columns = [
-  {
-    title: 'skill',
-    key: 'skill',
-    fixed: 'left',
-    width: 20,
-    render: (text, record, index) => <img src={`/images/skill-icons/${skills.data[index].toLowerCase()}.gif`} height={16} width={16} />,
-  },
-  {
-    title: 'xp',
-    dataIndex: 'xpDiff',
-    key: 'xpDiff',
-    render: (text, record) => <TableXpStatistic data={text} suffix={record.currentXp} />
-  },
-  {
-    title: 'level',
-    dataIndex: 'levelDiff',
-    key: 'levelDiff',
-    render: (text, record) => <TableLevelStatistic data={text} suffix={record.currentLevel} />
-  },
-  {
-    title: 'rank',
-    dataIndex: 'rankDiff',
-    key: 'rankDiff',
-    render: (text, record) => <TableRankStatistic data={text} suffix={record.currentRank} />
-  },
-]
 
 class PlayerPage extends Component {
   state = {
@@ -132,13 +101,7 @@ class PlayerPage extends Component {
             </Button>
           </Form.Item>
         </Form>
-          <Table
-            columns={columns}
-            dataSource={Object.values(this.state.gains)}
-            size='small'
-            pagination={false}
-            loading={this.state.isLoading}
-          />
+        <PlayerTable data={Object.values(this.state.gains)} isLoading={this.state.isLoading} />
       </DefaultLayout>
     );
   }
