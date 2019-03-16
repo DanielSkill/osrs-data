@@ -10,11 +10,14 @@ import ReactDOM from 'react-dom';
 import PlayerPage from './views/player';
 import { Provider } from 'react-redux';
 import store from './store';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <PlayerPage />
+      <Router>
+        <Route path='/' component={PlayerPage} />
+      </Router>
     </Provider>
   )
 }
