@@ -76,7 +76,7 @@ class PlayerController extends Controller
 
         // if the user doesn't have any data points yet record their first data point
         if (!$player->dataPoints()->exists()) {
-            $this->dataPointService->recordPlayerDataPoint($request->name, $request->type);
+            $this->dataPointService->recordPlayerDataPoint($player);
         }
 
         // cache the response for performance benefits
