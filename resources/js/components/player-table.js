@@ -33,16 +33,18 @@ const columns = [
   },
 ]
 
-const PlayerTable = (props) => {
-  return (
-    <Table
-      columns={columns}
-      dataSource={props.data}
-      size='small'
-      pagination={false}
-      loading={props.isLoading}
-    />
-  )
+class PlayerTable extends React.PureComponent {
+  render() {
+    return (
+      <Table
+        columns={columns}
+        dataSource={this.props.data}
+        size='small'
+        pagination={false}
+        loading={this.props.isLoading}
+      />
+    )
+  }
 }
 
 export default PlayerTable
