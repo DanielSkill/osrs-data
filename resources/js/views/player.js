@@ -32,19 +32,19 @@ const columns = [
     title: 'xp',
     dataIndex: 'xpDiff',
     key: 'xpDiff',
-    render: (text) => <TableXpStatistic data={text} />
+    render: (text, record) => <TableXpStatistic data={text} suffix={record.currentXp} />
   },
   {
     title: 'level',
     dataIndex: 'levelDiff',
     key: 'levelDiff',
-    render: (text) => <TableLevelStatistic data={text} />
+    render: (text, record) => <TableLevelStatistic data={text} suffix={record.currentLevel} />
   },
   {
     title: 'rank',
     dataIndex: 'rankDiff',
     key: 'rankDiff',
-    render: (text) => <TableRankStatistic data={text} />
+    render: (text, record) => <TableRankStatistic data={text} suffix={record.currentRank} />
   },
 ]
 
