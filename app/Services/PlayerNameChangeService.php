@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Services\RSPlayerService;
 use App\Models\Player;
 use App\Events\PlayerNameChange;
+use App\Contracts\Repositories\PlayerRepositoryInterface;
 
 class PlayerNameChangeService
 {
@@ -14,11 +15,20 @@ class PlayerNameChangeService
     protected $playerService;
 
     /**
-     * @param RSPlayerService $playerService
+     * @var PlayerRepositoryInterface
      */
-    public function __construct(RSPlayerService $playerService)
+    protected $playerRepository;
+
+    /**
+     * @param RSPlayerService $playerService
+     * @param PlayerRepositoryInterface $playerRepository
+     */
+    public function __construct(
+        RSPlayerService $playerService,
+        PlayerRepositoryInterface $playerRepository)
     {
         $this->playerService = $playerService;
+        $this->playerRepository = $playerRepository;
     }
 
     /**
@@ -31,6 +41,13 @@ class PlayerNameChangeService
     public function changeName(Player $player, string $newName)
     {
         $oldName = $player->name;
+
+        $requestedPlayer = $this->playerRepository->find($newName);
+
+        // the requested name is not already in the database
+        if ($requestedPlayer) {
+            return false;
+        }
 
         $exists = $this->playerService->getPlayerStats($newName);
 
