@@ -1,14 +1,12 @@
-
-
-
 import React, { Component } from 'react';
-
 import playerService from '../services/player';
-import { DatePicker, AutoComplete, Form, Button } from 'antd';
+import { DatePicker, Col, Row } from 'antd';
 import DefaultLayout from '../components/layout/layout';
 import moment from 'moment';
 import localStorage from '../services/localStorage';
 import PlayerTable from '../components/table/player-table';
+import { PlayerHeader } from '../components/player/player-header';
+import axios from 'axios';
 
 const {
   RangePicker
@@ -16,9 +14,11 @@ const {
 
 class PlayerPage extends Component {
   state = {
-    player: {},
+    player: {
+      player:{}
+    },
     gains: {},
-    user: "",
+    user: this.props.match.params.player,
     dateRange: [
       moment({ hour: 0, minute: 0, seconds: 0 }).subtract(6, 'days'),
       moment({ hour: 23, minute: 59, seconds: 59 })
@@ -26,10 +26,20 @@ class PlayerPage extends Component {
     isLoading: false
   }
 
-  getUserData = () => {
+  componentDidMount() {
+    this.getUserData();
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.match.params.player !== nextProps.match.params.player) {
+      this.getUserData(nextProps.match.params.player);
+    }
+  }
+
+  getUserData = (player) => {
     this.setState({ isLoading: true })
 
-    playerService.getPlayerDetails(this.state.user)
+    playerService.getPlayerDetails(player ? player : this.state.user)
       .then(response => {
         if (response.status !== 404) {
           this.setState({
@@ -41,14 +51,18 @@ class PlayerPage extends Component {
           // only save them as a search if data was found
           if (response.data.data.dataPoints.length > 0) {
             localStorage.addItem('searches', this.state.user)
-          
           }
         }
       })
   }
 
-  handleChange = (value) => {
-    this.setState({ user: value })
+  updateData = () => {
+    axios.post('/api/stats/record', {
+      'name': this.state.player.player.name
+    })
+    .then(() => {
+      this.getUserData();
+    })
   }
 
   handleDateRangeChange = (value) => {
@@ -63,45 +77,28 @@ class PlayerPage extends Component {
     });
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.getUserData();
-  }
-
   render() {
     return (
       <DefaultLayout>
-        <Form layout="inline" onSubmit={this.handleSubmit}>
-          <Form.Item>
-            <AutoComplete
-              value={this.state.user}
-              placeholder="Username"
-              dataSource={localStorage.getItem('searches', [])}
-              onChange={this.handleChange}
-              style={{ width: 200 }}
-              filterOption
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item>
-            <RangePicker
-              showTime={{ format: 'HH:mm' }}
-              format="YYYY-MM-DD HH:mm"
-              placeholder={['Start Time', 'End Time']}
-              defaultValue={this.state.dateRange}
-              onChange={this.handleDateRangeChange}
-            />
-          </Form.Item>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-              >
-                Find
-            </Button>
-          </Form.Item>
-        </Form>
-        <PlayerTable data={Object.values(this.state.gains)} isLoading={this.state.isLoading} />
+        <PlayerHeader
+          name={this.state.player.player.name}
+          lastUpdated={this.state.player.player.last_updated}
+          update={this.updateData}
+        />
+        <RangePicker
+          style={{ marginBottom: 10 }}
+          ranges={{ Today: [moment(), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')] }}
+          // showTime={{ format: 'HH:mm' }}
+          format="YYYY-MM-DD HH:mm"
+          placeholder={['Start Time', 'End Time']}
+          defaultValue={this.state.dateRange}
+          onChange={this.handleDateRangeChange}
+        />
+        <Row>
+          <Col span={18}>
+            <PlayerTable data={Object.values(this.state.gains)} isLoading={this.state.isLoading} />
+          </Col>
+        </Row>
       </DefaultLayout>
     );
   }
