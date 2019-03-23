@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table } from 'antd';
-import TableRankStatistic from '../components/table-rank-statistic';
-import TableLevelStatistic from '../components/table-level-statistic';
-import TableXpStatistic from '../components/table-xp-statistic';
-import skills from '../data/skills';
+import TableRankStatistic from './table-rank-statistic';
+import TableLevelStatistic from './table-level-statistic';
+import TableXpStatistic from './table-xp-statistic';
+import skills from '../../data/skills';
 
 const columns = [
   {

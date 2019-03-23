@@ -5,10 +5,10 @@ import React, { Component } from 'react';
 
 import playerService from '../services/player';
 import { DatePicker, AutoComplete, Form, Button } from 'antd';
-import DefaultLayout from '../components/layout';
+import DefaultLayout from '../components/layout/layout';
 import moment from 'moment';
 import localStorage from '../services/localStorage';
-import PlayerTable from '../components/player-table';
+import PlayerTable from '../components/table/player-table';
 
 const {
   RangePicker
