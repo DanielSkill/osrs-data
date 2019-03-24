@@ -60,8 +60,11 @@ class PlayerPage extends Component {
   }
 
   updateData = () => {
+    this.setState({ isLoading: true })
+
     playerService.updatePlayerStats(this.state.player.player.name)
     .then(() => {
+      // this handles loading state
       this.getUserData(this.state.player.player.name);
     })
   }
@@ -85,6 +88,7 @@ class PlayerPage extends Component {
           name={this.state.player.player.name}
           lastUpdated={this.state.player.player.last_updated}
           update={this.updateData}
+          isLoading={this.state.isLoading}
         />
         <RangePicker
           style={{ marginBottom: 10 }}

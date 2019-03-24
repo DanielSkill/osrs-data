@@ -10,7 +10,7 @@ export const PlayerHeader = (props) => {
       tags={<Tag color="green">Updated: {props.lastUpdated}</Tag>}
       extra={[
         <Button key="2">Change Name</Button>,
-        <Button key="1" type="primary" onClick={props.update}>
+        <Button key="1" type="primary" onClick={props.update} loading={props.isLoading}>
           Refresh
         </Button>,
       ]}
