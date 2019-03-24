@@ -4,24 +4,33 @@ import skills from '../data/skills.js';
 
 
 const getPlayerDetails = (name) => {
-    return axios.get(`/api/stats/player/${name}`)
-        .then(response => {
-            return response
-        })
+  return axios.get(`/api/stats/player/${name}`)
+    .then(response => {
+      return response
+    })
+}
+
+const updatePlayerStats = (player) => {
+  return axios.post('/api/stats/record', {
+    'name': player
+  })
+  .then(response => {
+    return response
+  })
 }
 
 const getGainsInPeriod = (dataPoints, startDate, endDate) => {
-    const momentStart = moment(startDate);
-    const momentEnd = moment(endDate).endOf('day');
+  const momentStart = moment(startDate);
+  const momentEnd = moment(endDate).endOf('day');
 
-    const filteredDataPoints = dataPoints.filter((dataPoint) => {
-      return (moment(dataPoint.created_at).isBetween(momentStart, momentEnd));
-    });
+  const filteredDataPoints = dataPoints.filter((dataPoint) => {
+    return (moment(dataPoint.created_at).isBetween(momentStart, momentEnd));
+  });
 
-    let firstDataPoint = filteredDataPoints[0]
-    let lastDataPoint = filteredDataPoints[filteredDataPoints.length - 1]
+  let firstDataPoint = filteredDataPoints[0]
+  let lastDataPoint = filteredDataPoints[filteredDataPoints.length - 1]
 
-    return getXpDifference(firstDataPoint, lastDataPoint)
+  return getXpDifference(firstDataPoint, lastDataPoint)
 }
 
 const getXpDifference = (firstDataPoint, lastDataPoint) => {
@@ -32,7 +41,7 @@ const getXpDifference = (firstDataPoint, lastDataPoint) => {
       let xpDiff = lastDataPoint.data[skill].xp - firstDataPoint.data[skill].xp
       let levelDiff = lastDataPoint.data[skill].level - firstDataPoint.data[skill].level
       let rankDiff = lastDataPoint.data[skill].rank - firstDataPoint.data[skill].rank
-  
+
       diffCollection[skill] = {
         'xpDiff': xpDiff,
         'levelDiff': levelDiff,
@@ -62,6 +71,7 @@ const getXpDifference = (firstDataPoint, lastDataPoint) => {
 
 export default {
   getPlayerDetails,
+  updatePlayerStats,
   getXpDifference,
   getGainsInPeriod
 }

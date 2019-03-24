@@ -13,14 +13,19 @@ class HeaderSearch extends Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.history.push(`/player/${this.state.search}`)
+    e.preventDefault()
+    this.changePage()
+  }
+
+  changePage = (value) => {
+    this.props.history.push(`/player/${value ? value : this.state.search}`)
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <AutoComplete
+          onSelect={this.changePage}
           value={this.state.search}
           placeholder="Search..."
           dataSource={localStorage.getItem('searches', [])}

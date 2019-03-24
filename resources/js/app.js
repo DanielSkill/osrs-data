@@ -11,14 +11,16 @@ import PlayerPage from './views/player';
 import HomePage from './views/home';
 import { Provider } from 'react-redux';
 import store from './store';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <Route path='/' exact component={HomePage} />
-        <Route path='/player/:player' component={PlayerPage} />
+        <Switch>
+          <Route path='/' exact component={HomePage} />
+          <Route path='/player/:player' component={PlayerPage} />
+        </Switch>
       </Router>
     </Provider>
   )

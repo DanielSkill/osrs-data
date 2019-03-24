@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import HeaderSearch from './header-search';
+import { NavLink } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 
@@ -14,7 +15,9 @@ const DefaultLayout = (props) => {
           defaultSelectedKeys={['1']}
           style={{ lineHeight: '64px', float: "left" }}
           >
-          <Menu.Item key="1">Home</Menu.Item>
+          <Menu.Item key="1">
+            <NavLink to="/">Home</NavLink>
+          </Menu.Item>
           <Menu.Item key="2">Records</Menu.Item>
           <Menu.Item key="3">Current</Menu.Item>
         </Menu>

@@ -41,7 +41,6 @@ class PlayerPage extends Component {
 
     playerService.getPlayerDetails(player ? player : this.state.user)
       .then(response => {
-        if (response.status !== 404) {
           this.setState({
             player: response.data.data,
             gains: playerService.getGainsInPeriod(response.data.data.dataPoints, this.state.dateRange[0], this.state.dateRange[1]),
@@ -52,16 +51,18 @@ class PlayerPage extends Component {
           if (response.data.data.dataPoints.length > 0) {
             localStorage.addItem('searches', this.state.user)
           }
-        }
+      })
+      .catch(error => {
+        console.log(error);
+        // TODO: if 404 render error page
+        this.setState({isLoading: false});
       })
   }
 
   updateData = () => {
-    axios.post('/api/stats/record', {
-      'name': this.state.player.player.name
-    })
+    playerService.updatePlayerStats(this.state.player.player.name)
     .then(() => {
-      this.getUserData();
+      this.getUserData(this.state.player.player.name);
     })
   }
 
@@ -87,8 +88,8 @@ class PlayerPage extends Component {
         />
         <RangePicker
           style={{ marginBottom: 10 }}
-          ranges={{ Today: [moment(), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')] }}
-          // showTime={{ format: 'HH:mm' }}
+          ranges={{ Today: [moment().startOf('day'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')] }}
+          showTime={{ format: 'HH:mm' }}
           format="YYYY-MM-DD HH:mm"
           placeholder={['Start Time', 'End Time']}
           defaultValue={this.state.dateRange}
