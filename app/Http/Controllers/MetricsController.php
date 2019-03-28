@@ -30,7 +30,7 @@ class MetricsController extends Controller
      */
     public function skillLeaderboard(Request $request, $skill)
     {
-        return $this->metricsRepository->getXpGainedLeaderboard($skill);
+        return $this->metricsRepository->getXpGainedLeaderboard($skill, $request->days);
     }
 
     /**
