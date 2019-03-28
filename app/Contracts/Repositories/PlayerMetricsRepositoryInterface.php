@@ -13,7 +13,7 @@ interface PlayerMetricsRepositoryInterface
      * @param string $skill
      * @return Collection
      */
-    public function getXpGainedLeaderboard(string $skill, int $days);
+    public function getXpGainedLeaderboard(string $skill, $days);
 
     /**
      * Return players with the highest xp gained for a specific achievement

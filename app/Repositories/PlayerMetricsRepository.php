@@ -15,19 +15,23 @@ class PlayerMetricsRepository implements PlayerMetricsRepositoryInterface
      * Return the players with the most xp gained in a skill
      *
      * @param string $skill
-     * @param int $days
+     * @param int|null $days
      * @return Collection
      */
-    public function getXpGainedLeaderboard(string $skill, int $days = 7)
+    public function getXpGainedLeaderboard(string $skill, $days = 7)
     {
         $skill = ucfirst($skill);
 
-        return Player::join('player_data_points', 'players.id', '=', 'player_data_points.player_id')
-            ->whereBetween('player_data_points.created_at', [Carbon::now()->subDays($days), Carbon::now()])
+        $query = Player::join('player_data_points', 'players.id', '=', 'player_data_points.player_id')
             ->selectRaw("*, MAX(cast(json_extract(`data`, '$.{$skill}.xp') as unsigned)) - MIN(cast(json_extract(`data`, '$.{$skill}.xp') as unsigned)) as xp_gained")
             ->orderByDesc('xp_gained')
-            ->groupBy('player_id')
-            ->get();
+            ->groupBy('player_id');
+
+        if ($days) {
+            $query->whereBetween('player_data_points.created_at', [Carbon::now()->subDays($days), Carbon::now()]);
+        }
+
+        return $query->get();
     }
 
     /**
