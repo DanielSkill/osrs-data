@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +11,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('stats/record', 'PlayerController@record')->name('player.record');
+Route::get('stats/gains/{name}', 'PlayerController@gains')->name('player.gains');
+Route::get('stats/player/{name}', 'PlayerController@show')->name('player.show');
+Route::get('stats/player/data-points/{name}', 'PlayerController@dataPoints')->name('player.datapoints');
+
+Route::post('player/change-name', 'PlayerController@changeName')->name('player.change-name');
+
+Route::get('leaderboard/skill/{name}', 'MetricsController@skillLeaderboard')->name('leaderboard.skills');
+Route::get('leaderboard/achievements/{achievement}', 'MetricsController@achievementLeaderboard')->name('leaderboard.achievements');
